@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <time.h>
 
 #include <gtk/gtk.h>
 
@@ -27,12 +26,12 @@ static GtkTreeStore* create_store(const unsigned size) {
 	{
 		GtkTreeIter iter;
 		gtk_tree_model_get_iter_first(GTK_TREE_MODEL(treestore), &iter);
-		const unsigned long time_before = (unsigned long) time(NULL);
+		const unsigned long time_before = g_get_monotonic_time();
 		do {
 			gtk_tree_store_set(treestore, &iter, U64_COLUMN, (guint64) 99, -1);
 		} while(gtk_tree_model_iter_next (GTK_TREE_MODEL(treestore), &iter));
-		const unsigned long time_after = (unsigned long) time(NULL);
-		fprintf(stdout, "%u,%lu\n", size, time_after - time_before); 
+		const unsigned long time_after = g_get_monotonic_time();
+		fprintf(stdout, "%u,%lu\n", size, (time_after - time_before)/1000);
 	}
 	
 	return treestore;
